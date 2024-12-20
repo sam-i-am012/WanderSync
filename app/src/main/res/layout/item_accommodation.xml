@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#FFFFFF">
+
+    <!-- Location Text -->
+    <TextView
+        android:id="@+id/locationText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location"
+        android:textStyle="italic"
+        android:textSize="12sp"
+        android:textColor="#666666" />
+
+    <!-- Hotel Name Text -->
+    <TextView
+        android:id="@+id/hotelNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hotel Name"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:textColor="#000000" />
+
+    <!-- Check-in/Check-out and Number of Rooms -->
+    <TextView
+        android:id="@+id/checkInOutText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Check-in: ---, Check-out: ---"
+        android:textSize="14sp"
+        android:textColor="#444444" />
+
+    <TextView
+        android:id="@+id/numRoomsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Number of Rooms: --"
+        android:textSize="14sp"
+        android:layout_marginTop="4dp"
+        android:textColor="#444444" />
+
+    <!-- Room Type Label -->
+    <TextView
+        android:id="@+id/roomTypeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Room Type"
+        android:background="@drawable/room_type_background"
+        android:textColor="#444444"
+        android:textSize="12sp"
+        android:layout_marginTop="4dp"
+        android:padding="4dp" />
+
+</LinearLayout>

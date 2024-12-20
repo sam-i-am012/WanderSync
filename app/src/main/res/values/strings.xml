@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">SprintProject</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string-array name="numberOfRooms">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
+    <string-array name="roomTypes">
+        <item>Single Room</item>
+        <item>Standard Double Room</item>
+        <item>Standard Twin Room</item>
+        <item>Deluxe Double Room</item>
+        <item>Studio Room</item>
+        <item>Junior Suite</item>
+        <item>Executive Suite</item>
+        <item>Presidential Suite</item>
+    </string-array>
+</resources>

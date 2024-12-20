@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.LoginActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <!-- WanderSync -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="WanderSync"
+            android:textSize="50sp"
+            android:textColor="@color/lightBlue"
+            android:fontFamily="@font/silvertones"
+            android:layout_marginBottom="200dp"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="20dp"
+            />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <!-- Create an Account Tit -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create an Account"
+                android:textSize="40sp"
+                android:textColor="#29445e"
+                android:fontFamily="@font/coolvetica"
+                android:layout_marginBottom="25dp"
+                />
+
+            <!-- email -->
+            <EditText
+                android:id="@+id/email_createAccount"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:padding="10dp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- password -->
+            <EditText
+                android:id="@+id/password_createAccount"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:padding="10dp"
+                android:layout_marginBottom="24dp" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <!-- create button -->
+            <Button
+                android:id="@+id/createAccountButton"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:text="Create Account"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/bluegray"
+                />
+
+            <!-- return to login clickable text-->
+            <TextView
+                android:id="@+id/returnToLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Already have an account? Click here"
+                android:backgroundTint="@color/bluegray"
+                android:fontFamily="@font/coolvetica"
+                android:textSize="18sp"
+                />
+
+        </LinearLayout>
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

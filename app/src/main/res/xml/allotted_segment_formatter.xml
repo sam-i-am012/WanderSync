@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<segmentFormatter xmlns:android="http://schemas.android.com/apk/res/android">
+    <fillPaint color="#00FF00" /> <!-- Green color for allotted days -->
+</segmentFormatter>

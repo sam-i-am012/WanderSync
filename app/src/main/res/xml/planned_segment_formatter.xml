@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<segmentFormatter xmlns:android="http://schemas.android.com/apk/res/android">
+    <fillPaint color="#FF0000" /> <!-- Red color for planned days -->
+</segmentFormatter>

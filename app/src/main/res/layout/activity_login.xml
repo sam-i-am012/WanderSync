@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.LoginActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <!-- WanderSync -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="WanderSync"
+            android:textSize="50sp"
+            android:textColor="@color/lightBlue"
+            android:fontFamily="@font/silvertones"
+            android:layout_marginBottom="200dp"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="20dp"
+            />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <!-- Log in -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Log in"
+                android:textSize="40sp"
+                android:textColor="@color/darkBlue"
+                android:fontFamily="@font/coolvetica"
+                android:layout_marginBottom="25dp"
+                />
+
+            <!-- email -->
+            <EditText
+                android:id="@+id/email_login"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:padding="10dp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- password -->
+            <EditText
+                android:id="@+id/password_login"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:padding="10dp"
+                android:layout_marginBottom="24dp" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <!-- login button -->
+            <Button
+                android:id="@+id/loginButton"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:text="Login"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/bluegray"
+                />
+
+            <!-- create account button -->
+            <TextView
+                android:id="@+id/accountCreationPage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Don't have an account? Click here"
+                android:backgroundTint="@color/bluegray"
+                android:fontFamily="@font/coolvetica"
+                android:textSize="18sp"
+                android:background="?attr/selectableItemBackground" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/exitButton"
+            android:layout_width="90dp"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom|start"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/white_exit"
+            android:text="X"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
