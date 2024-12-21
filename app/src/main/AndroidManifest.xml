@@ -10,38 +10,38 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SprintProject"
+        android:theme="@style/Theme.WanderSync"
         tools:targetApi="31">
         <activity
-            android:name=".view.CollabNotesActivity"
+            android:name="com.example.wanderSync.view.CollabNotesActivity"
             android:exported="false" />
         <activity
-            android:name=".view.LogisticsActivity"
+            android:name="com.example.wanderSync.view.LogisticsActivity"
             android:exported="false" />
         <activity
-            android:name=".view.TravelCommunityActivity"
+            android:name="com.example.wanderSync.view.TravelCommunityActivity"
             android:exported="false" />
         <activity
-            android:name=".view.AccommodationsActivity"
+            android:name="com.example.wanderSync.view.AccommodationsActivity"
             android:exported="false" />
         <activity
-            android:name=".view.DiningEstablishmentsActivity"
+            android:name="com.example.wanderSync.view.DiningEstablishmentsActivity"
             android:exported="false" />
         <activity
-            android:name=".view.PostDetailsActivity"
+            android:name="com.example.wanderSync.view.PostDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".view.DestinationsActivity"
+            android:name="com.example.wanderSync.view.DestinationsActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".view.CreateAccountActivity"
+            android:name="com.example.wanderSync.view.CreateAccountActivity"
             android:exported="false" />
         <activity
-            android:name=".view.LoginActivity"
+            android:name="com.example.wanderSync.view.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".view.MainActivity"
+            android:name="com.example.wanderSync.view.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

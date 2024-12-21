@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.sprintproject'
+    namespace 'com.example.wandersync'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.sprintproject"
+        applicationId "com.example.wandersync"
         minSdk 26
         targetSdk 34
         versionCode 1
