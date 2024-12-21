@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.wanderSync.model.Accommodation;
+import com.example.wanderSync.model.databaseModel.Accommodation;
 import com.example.wandersync.R;
 
 import java.util.ArrayList;

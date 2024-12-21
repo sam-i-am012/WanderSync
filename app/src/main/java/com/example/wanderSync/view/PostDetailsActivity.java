@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.wandersync.R;
-import com.example.wanderSync.model.Post;
+import com.example.wanderSync.model.databaseModel.travelCommunity;
 
 public class PostDetailsActivity extends AppCompatActivity {
 
@@ -24,7 +24,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         TextView tvDiningReservations = findViewById(R.id.tvDiningReservations);
         TextView tvNotes = findViewById(R.id.tvNotes);
 
-        Post post = (Post) getIntent().getSerializableExtra("POST_DATA");
+        travelCommunity post = (travelCommunity) getIntent().getSerializableExtra("POST_DATA");
 
         tvDestination.setText("Destination: " + post.getPostDestination());
         tvStartDate.setText("Start date: " + post.getPostStartDate());

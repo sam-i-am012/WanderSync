@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.wanderSync.model.Dining;
+import com.example.wanderSync.model.databaseModel.Dining;
 import com.example.wanderSync.model.ReservationValidator;
 import com.example.wandersync.R;
 

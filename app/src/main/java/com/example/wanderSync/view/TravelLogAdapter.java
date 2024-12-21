@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wandersync.R;
-import com.example.wanderSync.model.TravelLog;
+import com.example.wanderSync.model.databaseModel.TravelLog;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

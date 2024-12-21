@@ -7,8 +7,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.wanderSync.model.FirestoreSingleton;
-import com.example.wanderSync.model.Invitation;
-import com.example.wanderSync.model.TravelLog;
+import com.example.wanderSync.model.databaseModel.Invitation;
+import com.example.wanderSync.model.databaseModel.TravelLog;
 import com.example.wanderSync.model.TripUtils;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;

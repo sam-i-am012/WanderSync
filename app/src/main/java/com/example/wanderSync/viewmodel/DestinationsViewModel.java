@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.wanderSync.model.FirestoreSingleton;
 import com.example.wanderSync.model.Result;
-import com.example.wanderSync.model.TravelLog;
+import com.example.wanderSync.model.databaseModel.TravelLog;
 import com.example.wanderSync.model.TravelLogValidator;
 import com.example.wanderSync.model.VacationTimeCalculator;
 import com.example.wanderSync.model.CalcVacationTimeValidator;

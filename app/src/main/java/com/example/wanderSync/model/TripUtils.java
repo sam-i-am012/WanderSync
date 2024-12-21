@@ -1,4 +1,6 @@
 package com.example.wanderSync.model;
+import com.example.wanderSync.model.databaseModel.TravelLog;
+
 import java.util.List;
 
 

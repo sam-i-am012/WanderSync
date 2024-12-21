@@ -6,6 +6,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.example.wanderSync.model.databaseModel.Accommodation;
+import com.example.wanderSync.model.databaseModel.Dining;
+import com.example.wanderSync.model.databaseModel.travelCommunity;
+import com.example.wanderSync.model.databaseModel.TravelLog;
+import com.example.wanderSync.model.databaseModel.User;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
 
@@ -35,7 +40,7 @@ import java.util.Set;
 public class FirestoreSingleton {
     private static FirestoreSingleton instance;
     private FirebaseFirestore firestore;
-    private MutableLiveData<List<Post>> travelCommunityLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<travelCommunity>> travelCommunityLiveData = new MutableLiveData<>();
     private FirebaseAuth auth;
     private static final String USERS = "users";
     private static final String TRAVEL_LOGS = "travelLogs";
@@ -235,18 +240,18 @@ public class FirestoreSingleton {
 
         String user1 = "George P. Burdell";
         String user2 = "Buzz";
-        LiveData<List<Post>> postsLiveData = getTravelPosts();
-        postsLiveData.observeForever(new Observer<List<Post>>() {
+        LiveData<List<travelCommunity>> postsLiveData = getTravelPosts();
+        postsLiveData.observeForever(new Observer<List<travelCommunity>>() {
             @Override
-            public void onChanged(List<Post> posts) {
+            public void onChanged(List<travelCommunity> posts) {
                 if (posts.size() < 2) {
-                    addTravelPost(new Post(user1, "New York",
+                    addTravelPost(new travelCommunity(user1, "New York",
                             "2023-12-05",
                             "2023-12-15",
                             "Hilton Hotel",
                             "Lombardi's Pizza",
                             "Almost got robbed by a Mickey Mouse"), null);
-                    addTravelPost(new Post(user2, "Paris",
+                    addTravelPost(new travelCommunity(user2, "Paris",
                             "2023-11-25",
                             "2023-12-05",
                             "Paris Hotel",
@@ -449,7 +454,7 @@ public class FirestoreSingleton {
     }
 
     public void addAccommodation(Accommodation accommodation,
-                                  OnCompleteListener<DocumentReference> listener) {
+                                 OnCompleteListener<DocumentReference> listener) {
         firestore.collection("accommodation")
                 .add(accommodation)
                 .addOnCompleteListener(task -> {
@@ -626,7 +631,7 @@ public class FirestoreSingleton {
     }
 
 
-    public void addTravelPost(Post travelPost, OnCompleteListener<DocumentReference> listener) {
+    public void addTravelPost(travelCommunity travelPost, OnCompleteListener<DocumentReference> listener) {
         // Check for duplicate entry first
         firestore.collection(TRAVEL_COMMUNITY)
                 .whereEqualTo("postUsername", travelPost.getPostUsername())
@@ -658,16 +663,16 @@ public class FirestoreSingleton {
                 });
     }
 
-    public LiveData<List<Post>> getTravelPosts() {
+    public LiveData<List<travelCommunity>> getTravelPosts() {
         //travelCommunityLiveData
         firestore.collection(TRAVEL_COMMUNITY) // query logs
                 .addSnapshotListener((value, error) -> {
                     if (error != null) {
                         return; // to avoid null pointer
                     }
-                    List<Post> postLogs = new ArrayList<>();
+                    List<travelCommunity> postLogs = new ArrayList<>();
                     for (QueryDocumentSnapshot document : value) {
-                        Post log = document.toObject(Post.class);
+                        travelCommunity log = document.toObject(travelCommunity.class);
                         postLogs.add(log);
                     }
                     travelCommunityLiveData.setValue(postLogs);

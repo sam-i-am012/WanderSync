@@ -1,5 +1,6 @@
 package com.example.wanderSync.model;
 
+import com.example.wanderSync.model.databaseModel.User;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.AuthResult;

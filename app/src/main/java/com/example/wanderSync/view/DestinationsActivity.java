@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wanderSync.model.FirestoreSingleton;
-import com.example.wanderSync.model.TravelLog;
+import com.example.wanderSync.model.databaseModel.TravelLog;
 import com.example.wanderSync.model.TravelLogValidator;
 import com.example.wanderSync.viewmodel.DestinationsViewModel;
 import com.example.wandersync.R;

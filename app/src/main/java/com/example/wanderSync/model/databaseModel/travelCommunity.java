@@ -1,8 +1,8 @@
-package com.example.wanderSync.model;
+package com.example.wanderSync.model.databaseModel;
 
 import java.io.Serializable;
 
-public class Post implements Serializable {
+public class travelCommunity implements Serializable {
     private String username;
     private String destination;
     private String startDate;
@@ -10,8 +10,8 @@ public class Post implements Serializable {
     private String accommodations;
     private String diningReservations;
     private String notes;
-    public Post(String username, String destination, String startDate, String endDate,
-                String accommodations, String diningReservations, String notes) {
+    public travelCommunity(String username, String destination, String startDate, String endDate,
+                           String accommodations, String diningReservations, String notes) {
         this.username = username;
         this.destination = destination;
         this.startDate = startDate;
@@ -21,7 +21,7 @@ public class Post implements Serializable {
         this.notes = notes;
     }
 
-    public Post() {
+    public travelCommunity() {
     }
 
     public String getPostUsername() {

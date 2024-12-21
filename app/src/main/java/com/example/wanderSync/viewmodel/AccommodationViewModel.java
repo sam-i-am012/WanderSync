@@ -8,11 +8,11 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.wanderSync.model.Accommodation;
+import com.example.wanderSync.model.databaseModel.Accommodation;
 import com.example.wanderSync.model.FirestoreSingleton;
 import com.example.wanderSync.model.Location;
 import com.example.wanderSync.model.Result;
-import com.example.wanderSync.model.TravelLog;
+import com.example.wanderSync.model.databaseModel.TravelLog;
 import com.example.wanderSync.view.AccommodationsAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

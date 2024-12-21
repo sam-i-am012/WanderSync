@@ -10,10 +10,10 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.wanderSync.model.Location;
 import com.example.wanderSync.model.ReservationValidator;
-import com.example.wanderSync.model.Dining;
+import com.example.wanderSync.model.databaseModel.Dining;
 import com.example.wanderSync.model.FirestoreSingleton;
 import com.example.wanderSync.model.Result;
-import com.example.wanderSync.model.TravelLog;
+import com.example.wanderSync.model.databaseModel.TravelLog;
 import com.example.wanderSync.view.DiningsAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

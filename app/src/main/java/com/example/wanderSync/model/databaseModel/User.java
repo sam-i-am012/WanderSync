@@ -1,4 +1,4 @@
-package com.example.wanderSync.model;
+package com.example.wanderSync.model.databaseModel;
 
 import java.util.List;
 

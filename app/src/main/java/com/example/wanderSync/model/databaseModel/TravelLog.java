@@ -1,5 +1,6 @@
-package com.example.wanderSync.model;
+package com.example.wanderSync.model.databaseModel;
 
+import com.example.wanderSync.model.Note;
 import com.google.firebase.Timestamp;
 import java.util.List;
 
