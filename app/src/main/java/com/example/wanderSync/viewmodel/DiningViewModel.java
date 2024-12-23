@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.wanderSync.model.Location;
 import com.example.wanderSync.model.ReservationValidator;
+import com.example.wanderSync.model.TravelLogManager;
 import com.example.wanderSync.model.databaseModel.Dining;
 import com.example.wanderSync.model.FirestoreSingleton;
 import com.example.wanderSync.model.Result;
@@ -26,6 +27,7 @@ public class DiningViewModel extends AndroidViewModel {
 
     private MutableLiveData<List<Location>> userLocations = new MutableLiveData<>();
     private FirestoreSingleton repository;
+    private final TravelLogManager travelLogManager = new TravelLogManager();
     private MutableLiveData<List<Dining>> diningLogs;
     private MutableLiveData<List<Dining>> diningLogsByLocation;
     private MutableLiveData<Result> resValidationResult = new MutableLiveData<>();
@@ -47,7 +49,7 @@ public class DiningViewModel extends AndroidViewModel {
 
     private void loadUserLocations() {
         String currentUserId = repository.getCurrentUserId();
-        repository.getTravelLogsByUser(currentUserId).observeForever(travelLogs -> {
+        travelLogManager.getTravelLogsByUser(currentUserId).observeForever(travelLogs -> {
             List<Location> locations = new ArrayList<>();
             for (TravelLog log : travelLogs) {
                 locations.add(new Location(log.getDocumentId(), log.getDestination()));

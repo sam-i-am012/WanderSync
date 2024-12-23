@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class FirestoreSingleton {
@@ -42,16 +43,6 @@ public class FirestoreSingleton {
     private FirebaseFirestore firestore;
     private MutableLiveData<List<travelCommunity>> travelCommunityLiveData = new MutableLiveData<>();
     private FirebaseAuth auth;
-    private static final String USERS = "users";
-    private static final String TRAVEL_LOGS = "travelLogs";
-    private static final String FIRESTORES = "Firestore";
-    private static final String DURATION = "duration";
-    private static final String ASSOCIATED_USERS = "associatedUsers";
-    private static final String DOCUMENT_ID = "documentId";
-    private static final String USER_ID = "userId";
-    private static final String DESTINATION = "destination";
-    private static final String DINING = "dining";
-    private static final String TRAVEL_COMMUNITY = "travel_community";
 
     private FirestoreSingleton() {
         firestore = FirebaseFirestore.getInstance();
@@ -65,8 +56,12 @@ public class FirestoreSingleton {
         return instance;
     }
 
+    public FirebaseFirestore getFirestore() {
+        return firestore;
+    }
+
     public String getCurrentUserId() {
-        return auth.getCurrentUser().getUid();
+        return Objects.requireNonNull(auth.getCurrentUser()).getUid();
     }
 
 
@@ -74,10 +69,22 @@ public class FirestoreSingleton {
     public LiveData<Integer> getDurationForUser(String userId) {
         MutableLiveData<Integer> durationLiveData = new MutableLiveData<>();
 
-        firestore.collection(USERS).document(userId).get()
+        firestore.collection("users").document(userId).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
-                        processDocumentForDuration(task.getResult(), durationLiveData);
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists() && document.contains("duration")) {
+                            Object durationObj = document.get("duration");
+                            int duration = 0;
+                            if (durationObj instanceof String) { // should always be the case
+                                try {
+                                    duration = Integer.parseInt((String) durationObj);
+                                } catch (NumberFormatException e) {
+                                    duration = 0; // just default if parsing doesn't work
+                                }
+                            }
+                            durationLiveData.setValue(duration);
+                        }
                     } else {
                         durationLiveData.setValue(0); // Failure case
                     }
@@ -86,115 +93,19 @@ public class FirestoreSingleton {
         return durationLiveData;
     }
 
-    private void processDocumentForDuration(DocumentSnapshot document, MutableLiveData<Integer> durationLiveData) {
-        if (document.exists() && document.contains(DURATION)) {
-            Object durationObj = document.get(DURATION);
-            durationLiveData.setValue(parseDuration(durationObj));
-        }
-    }
-
-    private int parseDuration(Object durationObj) {
-        if (durationObj instanceof Number) {
-            return ((Number) durationObj).intValue();
-        } else if (durationObj instanceof String) {
-            return parseDurationString((String) durationObj);
-        }
-        return 0; // Default value for unsupported types
-    }
-
-    private int parseDurationString(String durationStr) {
-        try {
-            return Integer.parseInt(durationStr);
-        } catch (NumberFormatException e) {
-            return 0; // Default for invalid string
-        }
-    }
-
-    public LiveData<List<TravelLog>> getTravelLogsByUser(String userId) {
-        MutableLiveData<List<TravelLog>> travelLogsLiveData = new MutableLiveData<>();
-        firestore.collection(TRAVEL_LOGS)
-                // use arrayContains to check if userId is in the associatedUsers array
-                .whereArrayContains(ASSOCIATED_USERS, userId)
-                .addSnapshotListener((value, error) -> {
-                    if (error != null) {
-                        return;
-                    }
-                    List<TravelLog> travelLogs = new ArrayList<>();
-                    for (QueryDocumentSnapshot document : value) {
-                        TravelLog log = document.toObject(TravelLog.class);
-                        travelLogs.add(log);
-                    }
-                    travelLogsLiveData.setValue(travelLogs);
-                });
-        return travelLogsLiveData;
-    }
-
-    public LiveData<List<TravelLog>> getLastFiveTravelLogsByUser(String userId) {
-        MutableLiveData<List<TravelLog>> travelLogsLiveData = new MutableLiveData<>();
-        firestore.collection(TRAVEL_LOGS)
-                // use arrayContains to check if userId is in the associatedUsers array
-                .whereArrayContains(ASSOCIATED_USERS, userId)
-                .orderBy("createdAt", Query.Direction.DESCENDING)  // creation date, newest first
-                .limit(5)  // limit to the last 5 entries
-                .addSnapshotListener((value, error) -> {
-                    if (error != null) {
-                        return;
-                    }
-                    List<TravelLog> travelLogs = new ArrayList<>();
-                    for (QueryDocumentSnapshot document : value) {
-                        TravelLog log = document.toObject(TravelLog.class);
-                        travelLogs.add(log);
-                    }
-                    travelLogsLiveData.setValue(travelLogs);
-                });
-        return travelLogsLiveData;
-    }
-
-    public void addTravelLog(TravelLog log, OnCompleteListener<DocumentReference> listener) {
-        // Automatically set createdAt
-        log.setCreatedAt(Timestamp.now());
-
-        // ensure that the creator's userId is added to associatedUserIds
-        if (!log.getAssociatedUsers().contains(log.getUserId())) {
-            log.addAssociatedUser(log.getUserId());
-        }
-
-        firestore.collection(TRAVEL_LOGS)
-                .add(log)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        String travelLogId = task.getResult().getId();
-
-                        // Update user's associatedDestinations
-                        updateUserAssociatedDestinations(log.getUserId(), travelLogId);
-
-                        // set documentId in the TravelLog object
-                        String documentId = task.getResult().getId();
-
-                        // update travel log id
-                        firestore.collection(TRAVEL_LOGS).document(documentId)
-                                .update(DOCUMENT_ID, documentId);
-                    }
-                    if (listener != null) {
-                        listener.onComplete(task);
-                    }
-                });
-    }
 
 
-    // adds new travel log ID to the asssociatedDestinations array field for specific user
-    private void updateUserAssociatedDestinations(String userId, String travelLogId) {
-        firestore.collection(USERS).document(userId)
-                .update("associatedDestinations", FieldValue.arrayUnion(travelLogId));
-    }
+
+
+
 
     // synchronizes the associatedDestinations field (will be used at the login screen in case
     // destinations were manually removed from database)
     public void syncUserAssociatedDestinationsOnLogin(String userId,
                                                       OnCompleteListener<Void> onCompleteListener) {
         // get all valid destinations from the travelLogs collection associated with the userId
-        firestore.collection(TRAVEL_LOGS)
-                .whereEqualTo(USER_ID, userId)
+        firestore.collection("travelLogs")
+                .whereEqualTo("userId", userId)
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
                     List<String> validDestinations = new ArrayList<>();
@@ -205,32 +116,13 @@ public class FirestoreSingleton {
                     }
 
                     // update the user's associated destinations with only the valid destinations
-                    firestore.collection(USERS).document(userId)
+                    firestore.collection("users").document(userId)
                             .update("associatedDestinations", validDestinations)
                             .addOnCompleteListener(onCompleteListener);
                 });
     }
 
-    public void prepopulateDatabase() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            return;
-        }
-        String userId = user.getUid();
-        LiveData<List<TravelLog>> travelLogsLiveData = getTravelLogsByUser(userId);
-        travelLogsLiveData.observeForever(new Observer<List<TravelLog>>() {
-            @Override
-            public void onChanged(List<TravelLog> logs) {
-                if (logs.size() < 2) {
-                    addTravelLog(new TravelLog(userId, "Paris", "2023-12-01", "2023-12-10",
-                            new ArrayList<>(Arrays.asList(userId)), new ArrayList<>()), null);
-                    addTravelLog(new TravelLog(userId, "New York", "2023-11-15", "2023-11-20",
-                            new ArrayList<>(Arrays.asList(userId)), new ArrayList<>()), null);
-                }
-                travelLogsLiveData.removeObserver(this);
-            }
-        });
-    }
+
 
     public void populateCommunityDatabase() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -266,7 +158,7 @@ public class FirestoreSingleton {
 
     // method to check if an email exists in the users collection
     public Task<QuerySnapshot> checkEmailExists(String email) {
-        return firestore.collection(USERS)
+        return firestore.collection("users")
                 .whereEqualTo("email", email)
                 .get();
     }
@@ -274,7 +166,7 @@ public class FirestoreSingleton {
     public LiveData<User> getUserById(String userId) {
         MutableLiveData<User> userLiveData = new MutableLiveData<>();
 
-        firestore.collection(USERS).document(userId)
+        firestore.collection("users").document(userId)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
@@ -297,10 +189,10 @@ public class FirestoreSingleton {
     }
 
     private void fetchTravelLogs(String location, String currentUserId, String documentId, MutableLiveData<List<User>> collaboratorsLiveData) {
-        firestore.collection(TRAVEL_LOGS)
-                .whereEqualTo(DESTINATION, location)
-                .whereEqualTo(DOCUMENT_ID, documentId)
-                .whereArrayContains(ASSOCIATED_USERS, currentUserId)
+        firestore.collection("travelLogs")
+                .whereEqualTo("destination", location)
+                .whereEqualTo("documentId", documentId)
+                .whereArrayContains("associatedUsers", currentUserId)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && !task.getResult().isEmpty()) {
@@ -315,7 +207,7 @@ public class FirestoreSingleton {
     private List<String> extractUserIds(QuerySnapshot result) {
         Set<String> userIds = new HashSet<>(); // Use Set to automatically remove duplicates
         for (DocumentSnapshot document : result) {
-            List<String> associatedUsers = (List<String>) document.get(ASSOCIATED_USERS);
+            List<String> associatedUsers = (List<String>) document.get("associatedUsers");
             if (associatedUsers != null) {
                 userIds.addAll(associatedUsers);
             }
@@ -329,8 +221,8 @@ public class FirestoreSingleton {
             return;
         }
 
-        firestore.collection(USERS)
-                .whereIn(USER_ID, userIds)
+        firestore.collection("users")
+                .whereIn("userId", userIds)
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
                     List<User> usersList = new ArrayList<>();
@@ -345,36 +237,41 @@ public class FirestoreSingleton {
 
     public void addUserToTrip(String invitingUserId, String invitedUserId, String location) {
         // find the travel log by location
-        firestore.collection(TRAVEL_LOGS)
-                .whereEqualTo(DESTINATION, location)
+        firestore.collection("travelLogs")
+                .whereEqualTo("destination", location)
                 // so people added as a collaborator can also invite other people
-                .whereArrayContains(ASSOCIATED_USERS, invitingUserId)
+                .whereArrayContains("associatedUsers", invitingUserId)
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
                     if (!querySnapshot.isEmpty()) {
                         // assuming only one trip with the given location, get the first result
                         String tripId = querySnapshot.getDocuments().get(0).getId();
 
-                        Log.d(FIRESTORES, "Found travel log for location: " + location
+                        Log.d("Firestore", "Found travel log for location: " + location
                                 + ", Trip ID: " + tripId);
 
                         // add the userId to the associatedUsers array for travel logs
-                        firestore.collection(TRAVEL_LOGS)
+                        firestore.collection("travelLogs")
                                 .document(tripId)
-                                .update(ASSOCIATED_USERS, FieldValue.arrayUnion(invitedUserId))
+                                .update("associatedUsers", FieldValue.arrayUnion(invitedUserId))
                                 .addOnSuccessListener(aVoid -> {
-                                    Log.d(FIRESTORES, "User added to trip successfully!");
+                                    Log.d("Firestore", "User added to trip successfully!");
 
                                     // Update user's associatedDestinations array to include trip
                                     updateUserAssociatedDestinations(invitedUserId, tripId);
                                 })
-                                .addOnFailureListener(e -> Log.e(FIRESTORES, "Error adding user to trip", e));
+                                .addOnFailureListener(e -> Log.e("Firestore", "Error adding user to trip", e));
                     } else {
-                        Log.w(FIRESTORES, "No travel log found for location: " + location
+                        Log.w("Firestore", "No travel log found for location: " + location
                                 + " with inviting user " + invitingUserId);
                     }
                 })
-                .addOnFailureListener(e -> Log.e(FIRESTORES, "Error finding travel log by location", e));
+                .addOnFailureListener(e -> Log.e("Firestore", "Error finding travel log by location", e));
+    }
+
+    private void updateUserAssociatedDestinations(String userId, String travelLogId) {
+        firestore.collection("users").document(userId)
+                .update("associatedDestinations", FieldValue.arrayUnion(travelLogId));
     }
 
     // Adds startDate, endDate, and duration to their respective locations in a specific user's
@@ -385,19 +282,19 @@ public class FirestoreSingleton {
         Map<String, Object> updates = new HashMap<>();
         updates.put("startDate", startDate);
         updates.put("endDate", endDate);
-        updates.put(DURATION, duration);
+        updates.put("duration", duration);
 
         // Perform the update with all fields at once
-        firestore.collection(USERS).document(userId).update(updates)
+        firestore.collection("users").document(userId).update(updates)
                 .addOnSuccessListener(aVoid ->
                     // Successfully updated the document
-                    Log.d(FIRESTORES, "DocumentSnapshot successfully updated!"))
+                    Log.d("Firestore", "DocumentSnapshot successfully updated!"))
                 .addOnFailureListener(e ->
                     // Failed to update the document
-                    Log.w(FIRESTORES, "Error updating document", e));
+                    Log.w("Firestore", "Error updating document", e));
     }
     public void addDining(Dining dining, OnCompleteListener<DocumentReference> listener) {
-        firestore.collection(DINING)
+        firestore.collection("dining")
                 .add(dining)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -414,7 +311,7 @@ public class FirestoreSingleton {
     public LiveData<List<Dining>> getDiningLogsByUserAndLocation(String locationId) {
         MutableLiveData<List<Dining>> diningLogsLiveData = new MutableLiveData<>();
 
-        firestore.collection(DINING)
+        firestore.collection("dining")
                 .whereEqualTo("travelDestination", locationId)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -426,19 +323,19 @@ public class FirestoreSingleton {
                         }
                         diningLogsLiveData.setValue(diningLogs);
                     } else {
-                        Log.e(FIRESTORES, "Error getting dining logs: ", task.getException());
+                        Log.e("Firestore", "Error getting dining logs: ", task.getException());
                         diningLogsLiveData.setValue(Collections.emptyList());
                     }
                 });
-        Log.d(FIRESTORES, "Getting dining log for: " + locationId);
+        Log.d("Firestore", "Getting dining log for: " + locationId);
         return diningLogsLiveData;
     }
 
 
     public LiveData<List<Dining>> getDiningByUser(String userId) {
         MutableLiveData<List<Dining>> diningLiveData = new MutableLiveData<>();
-        firestore.collection(DINING)
-                .whereEqualTo(USER_ID, userId) // query logs for this user
+        firestore.collection("dining")
+                .whereEqualTo("userId", userId) // query logs for this user
                 .addSnapshotListener((value, error) -> {
                     if (error != null) {
                         return; // to avoid null pointer
@@ -508,10 +405,10 @@ public class FirestoreSingleton {
     public void addNoteToTravelLog(String location, String currentUserId, String documentId,
                                    Note note,
                                    OnCompleteListener<Void> listener) {
-        firestore.collection(TRAVEL_LOGS)
-                .whereEqualTo(DESTINATION, location)
-                .whereEqualTo(DOCUMENT_ID, documentId)
-                .whereArrayContains(ASSOCIATED_USERS, currentUserId)
+        firestore.collection("travelLogs")
+                .whereEqualTo("destination", location)
+                .whereEqualTo("documentId", documentId)
+                .whereArrayContains("associatedUsers", currentUserId)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && !task.getResult().isEmpty()) {
@@ -520,7 +417,7 @@ public class FirestoreSingleton {
 
                         // reference to the travel log document
                         DocumentReference travelLogRef = firestore
-                                .collection(TRAVEL_LOGS).document(travelLogId);
+                                .collection("travelLogs").document(travelLogId);
 
                         // add the new note
                         travelLogRef.update("notes", FieldValue.arrayUnion(note))
@@ -535,10 +432,10 @@ public class FirestoreSingleton {
     public LiveData<List<Note>> getNotesForTravelLog(String location, String currentUserId, String documentId) {
         MutableLiveData<List<Note>> notesLiveData = new MutableLiveData<>();
 
-        firestore.collection(TRAVEL_LOGS)
-                .whereEqualTo(DESTINATION, location)
-                .whereEqualTo(DOCUMENT_ID, documentId)
-                .whereArrayContains(ASSOCIATED_USERS, currentUserId)
+        firestore.collection("travelLogs")
+                .whereEqualTo("destination", location)
+                .whereEqualTo("documentId", documentId)
+                .whereArrayContains("associatedUsers", currentUserId)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && !task.getResult().isEmpty()) {
@@ -561,8 +458,8 @@ public class FirestoreSingleton {
     private void fetchUserEmailsForNotes(List<Map<String, Object>> notesData, MutableLiveData<List<Note>> notesLiveData) {
         Set<String> userIds = extractUserIdsFromNotes(notesData);
 
-        firestore.collection(USERS)
-                .whereIn(USER_ID, new ArrayList<>(userIds))
+        firestore.collection("users")
+                .whereIn("userId", new ArrayList<>(userIds))
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
                     Map<String, String> userIdToEmailMap = buildUserIdToEmailMap(querySnapshot);
@@ -573,7 +470,7 @@ public class FirestoreSingleton {
                     notesLiveData.setValue(notes);
                 })
                 .addOnFailureListener(e -> {
-                    Log.d(FIRESTORES, "Failed to fetch user emails", e);
+                    Log.d("Firestore", "Failed to fetch user emails", e);
                     notesLiveData.setValue(new ArrayList<>());
                 });
     }
@@ -581,7 +478,7 @@ public class FirestoreSingleton {
     private Set<String> extractUserIdsFromNotes(List<Map<String, Object>> notesData) {
         Set<String> userIds = new HashSet<>();
         for (Map<String, Object> noteData : notesData) {
-            String userId = (String) noteData.get(USER_ID);
+            String userId = (String) noteData.get("userId");
             if (userId != null) {
                 userIds.add(userId);
             }
@@ -592,7 +489,7 @@ public class FirestoreSingleton {
     private Map<String, String> buildUserIdToEmailMap(QuerySnapshot querySnapshot) {
         Map<String, String> userIdToEmailMap = new HashMap<>();
         for (DocumentSnapshot userDoc : querySnapshot) {
-            String userId = userDoc.getString(USER_ID);
+            String userId = userDoc.getString("userId");
             String email = userDoc.getString("email");
             if (userId != null && email != null) {
                 userIdToEmailMap.put(userId, email);
@@ -605,7 +502,7 @@ public class FirestoreSingleton {
         List<Note> notes = new ArrayList<>();
         for (Map<String, Object> noteData : notesData) {
             String noteContent = (String) noteData.get("noteContent");
-            String userId = (String) noteData.get(USER_ID);
+            String userId = (String) noteData.get("userId");
             String email = userIdToEmailMap.get(userId);
 
             if (email != null) {
@@ -621,21 +518,21 @@ public class FirestoreSingleton {
     }
 
     private void handleEmptyNotes(MutableLiveData<List<Note>> notesLiveData) {
-        Log.d(FIRESTORES, "No notes found in the document");
+        Log.d("Firestore", "No notes found in the document");
         notesLiveData.setValue(new ArrayList<>());
     }
 
     private void handleQueryFailure(String location, MutableLiveData<List<Note>> notesLiveData) {
-        Log.d(FIRESTORES, "Query failed or no matching travel log found for: " + location);
+        Log.d("Firestore", "Query failed or no matching travel log found for: " + location);
         notesLiveData.setValue(new ArrayList<>());
     }
 
 
     public void addTravelPost(travelCommunity travelPost, OnCompleteListener<DocumentReference> listener) {
         // Check for duplicate entry first
-        firestore.collection(TRAVEL_COMMUNITY)
+        firestore.collection("travel_community")
                 .whereEqualTo("postUsername", travelPost.getPostUsername())
-                .whereEqualTo(DESTINATION, travelPost.getPostDestination())
+                .whereEqualTo("destination", travelPost.getPostDestination())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && !task.getResult().isEmpty()) {
@@ -647,7 +544,7 @@ public class FirestoreSingleton {
                         }
                     } else {
                         // If no duplicates found, proceed with adding the travel post
-                        firestore.collection(TRAVEL_COMMUNITY)
+                        firestore.collection("travel_community")
                                 .add(travelPost)
                                 .addOnCompleteListener(innerTask -> {
                                     if (innerTask.isSuccessful()) {
@@ -665,7 +562,7 @@ public class FirestoreSingleton {
 
     public LiveData<List<travelCommunity>> getTravelPosts() {
         //travelCommunityLiveData
-        firestore.collection(TRAVEL_COMMUNITY) // query logs
+        firestore.collection("travel_community") // query logs
                 .addSnapshotListener((value, error) -> {
                     if (error != null) {
                         return; // to avoid null pointer

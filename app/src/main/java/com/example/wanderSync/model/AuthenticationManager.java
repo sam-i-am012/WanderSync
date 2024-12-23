@@ -9,13 +9,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class FirebaseAuthManager {
+public class AuthenticationManager {
     private final FirebaseAuth mAuth;
     private final FirebaseFirestore firestore;
 
-    public FirebaseAuthManager() {
+    public AuthenticationManager() {
         mAuth = FirebaseAuth.getInstance();
-        firestore = FirebaseFirestore.getInstance();
+        firestore = FirestoreSingleton.getInstance().getFirestore();
     }
 
     public Task<AuthResult> login(String email, String password) {
