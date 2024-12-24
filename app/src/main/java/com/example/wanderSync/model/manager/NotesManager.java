@@ -9,13 +9,16 @@ import com.example.wanderSync.model.FirestoreSingleton;
 import com.example.wanderSync.model.Note;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -96,23 +99,22 @@ public class NotesManager {
 
                                         List<Note> notes = new ArrayList<>();
                                         for (Map<String, Object> noteData : notesData) {
-                                            String noteContent = (String) noteData
-                                                    .get("noteContent");
+                                            String noteContent = (String) noteData.get("noteContent");
                                             String userId = (String) noteData.get("userId");
                                             String email = userIdToEmailMap.get(userId);
+                                            Timestamp timestamp = (Timestamp) noteData.get("timestamp");
 
-                                            // add email to the Note object
+                                            // create Note object
                                             if (email != null) {
                                                 Note note = new Note(noteContent, email);
-                                                notes.add(note);
+                                                note.setTimestamp(timestamp);
+                                                notes.add(note); // add to the list of notes
                                             }
                                         }
-
-                                        // TODO: this doesn't actually work as intended. need to fix
-                                        // Sort notes by timestamp (descending order)
-                                        Collections.sort(notes, (note1, note2) -> Long
-                                                .compare(note2.getTimestampMillis(),
-                                                        note1.getTimestampMillis()));
+                                        notes.sort((note1, note2) -> Long.compare(
+                                                note2.getTimestamp().toDate().getTime(),
+                                                note1.getTimestamp().toDate().getTime())
+                                        );
 
                                         notesLiveData.setValue(notes);
                                     })
