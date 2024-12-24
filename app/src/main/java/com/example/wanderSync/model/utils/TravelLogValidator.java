@@ -1,4 +1,4 @@
-package com.example.wanderSync.model;
+package com.example.wanderSync.model.utils;
 
 import android.text.TextUtils;
 import java.text.ParseException;

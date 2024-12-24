@@ -1,4 +1,4 @@
-package com.example.wanderSync.view;
+package com.example.wanderSync.view.dining;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.wanderSync.model.databaseModel.Dining;
-import com.example.wanderSync.model.ReservationValidator;
+import com.example.wanderSync.model.utils.ReservationValidator;
 import com.example.wandersync.R;
 
 import java.util.ArrayList;

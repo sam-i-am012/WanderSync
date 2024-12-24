@@ -1,6 +1,8 @@
-package com.example.wanderSync.model;
+package com.example.wanderSync.model.utils;
 
 import android.annotation.SuppressLint;
+
+import com.example.wanderSync.model.Result;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

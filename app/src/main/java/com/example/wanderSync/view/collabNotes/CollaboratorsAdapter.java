@@ -1,4 +1,4 @@
-package com.example.wanderSync.view;
+package com.example.wanderSync.view.collabNotes;
 
 import android.view.LayoutInflater;
 import android.view.View;

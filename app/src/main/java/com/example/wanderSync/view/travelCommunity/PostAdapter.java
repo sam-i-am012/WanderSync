@@ -1,4 +1,4 @@
-package com.example.wanderSync.view;
+package com.example.wanderSync.view.travelCommunity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

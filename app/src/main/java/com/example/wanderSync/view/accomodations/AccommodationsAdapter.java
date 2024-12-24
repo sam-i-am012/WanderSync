@@ -1,4 +1,4 @@
-package com.example.wanderSync.view;
+package com.example.wanderSync.view.accomodations;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;

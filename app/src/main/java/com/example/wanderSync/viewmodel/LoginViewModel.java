@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.wanderSync.model.manager.AuthenticationManager;
-import com.example.wanderSync.model.InputValidator;
+import com.example.wanderSync.model.utils.InputValidator;
 import com.example.wanderSync.model.Result;
 import com.example.wanderSync.model.FirestoreSingleton;
 

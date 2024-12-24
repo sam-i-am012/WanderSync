@@ -10,6 +10,11 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.example.wanderSync.view.accomodations.AccommodationsActivity;
+import com.example.wanderSync.view.collabNotes.CollabNotesActivity;
+import com.example.wanderSync.view.dining.DiningEstablishmentsActivity;
+import com.example.wanderSync.view.travelCommunity.TravelCommunityActivity;
 import com.example.wandersync.R;
 import com.example.wanderSync.model.databaseModel.Invitation;
 import com.example.wanderSync.viewmodel.LogisticsViewModel;

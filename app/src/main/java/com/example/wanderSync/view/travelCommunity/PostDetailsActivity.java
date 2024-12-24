@@ -1,4 +1,4 @@
-package com.example.wanderSync.view;
+package com.example.wanderSync.view.travelCommunity;
 
 import android.content.Intent;
 import android.os.Bundle;

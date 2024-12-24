@@ -13,22 +13,22 @@
         android:theme="@style/Theme.WanderSync"
         tools:targetApi="31">
         <activity
-            android:name="com.example.wanderSync.view.CollabNotesActivity"
+            android:name="com.example.wanderSync.view.collabNotes.CollabNotesActivity"
             android:exported="false" />
         <activity
             android:name="com.example.wanderSync.view.LogisticsActivity"
             android:exported="false" />
         <activity
-            android:name="com.example.wanderSync.view.TravelCommunityActivity"
+            android:name="com.example.wanderSync.view.travelCommunity.TravelCommunityActivity"
             android:exported="false" />
         <activity
-            android:name="com.example.wanderSync.view.AccommodationsActivity"
+            android:name="com.example.wanderSync.view.accomodations.AccommodationsActivity"
             android:exported="false" />
         <activity
-            android:name="com.example.wanderSync.view.DiningEstablishmentsActivity"
+            android:name="com.example.wanderSync.view.dining.DiningEstablishmentsActivity"
             android:exported="false" />
         <activity
-            android:name="com.example.wanderSync.view.PostDetailsActivity"
+            android:name="com.example.wanderSync.view.travelCommunity.PostDetailsActivity"
             android:exported="false" />
         <activity
             android:name="com.example.wanderSync.view.DestinationsActivity"

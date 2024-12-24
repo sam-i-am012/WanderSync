@@ -1,4 +1,4 @@
-package com.example.wanderSync.model;
+package com.example.wanderSync.model.utils;
 
 public class InputValidator {
 

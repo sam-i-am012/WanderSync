@@ -1,4 +1,6 @@
-package com.example.wanderSync.model;
+package com.example.wanderSync.model.utils;
+
+import com.example.wanderSync.model.Result;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
