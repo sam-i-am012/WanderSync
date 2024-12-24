@@ -7,10 +7,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.wanderSync.model.FirestoreSingleton;
+import com.example.wanderSync.model.databaseModel.User;
 import com.example.wanderSync.model.manager.TravelLogManager;
 import com.example.wanderSync.model.databaseModel.Invitation;
 import com.example.wanderSync.model.databaseModel.TravelLog;
 import com.example.wanderSync.model.TripUtils;
+import com.example.wanderSync.model.manager.UserManager;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -20,6 +22,7 @@ import java.util.List;
 public class LogisticsViewModel extends ViewModel {
     private final FirestoreSingleton firestore;
     private final TravelLogManager travelLogManager = new TravelLogManager();
+    private final UserManager userManager = new UserManager();
     private MutableLiveData<List<String>> userLocations = new MutableLiveData<>();
     private MutableLiveData<String> toastMessage = new MutableLiveData<>();
     private MutableLiveData<Integer> plannedDaysLiveData = new MutableLiveData<>();
@@ -83,8 +86,7 @@ public class LogisticsViewModel extends ViewModel {
     // for allocated days
     public void loadDuration() {
         String currentUserId = firestore.getCurrentUserId();
-        allocatedLiveData = (MutableLiveData<Integer>) firestore
-                .getDurationForUser(currentUserId);
+        allocatedLiveData = (MutableLiveData<Integer>) userManager.getDurationForUser(currentUserId);
     }
 
     // to listen for invitations to accept / deny them

@@ -13,6 +13,7 @@ import com.example.wanderSync.model.databaseModel.TravelLog;
 import com.example.wanderSync.model.TravelLogValidator;
 import com.example.wanderSync.model.VacationTimeCalculator;
 import com.example.wanderSync.model.CalcVacationTimeValidator;
+import com.example.wanderSync.model.manager.UserManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -21,6 +22,7 @@ import java.util.List;
 public class DestinationsViewModel extends ViewModel {
     private final FirestoreSingleton repository;
     private final TravelLogManager travelLogManager = new TravelLogManager();
+    private  final UserManager userManager = new UserManager();
     private LiveData<List<TravelLog>> travelLogs;
     private LiveData<List<TravelLog>> lastFivetravelLogs;
     private VacationTimeCalculator vtCalculator = new VacationTimeCalculator();
@@ -77,7 +79,7 @@ public class DestinationsViewModel extends ViewModel {
 
     public void addDatesAndDuration(String userId, String startDate, String endDate,
                                     String duration) {
-        repository.addDatesAndDuration(userId, startDate, endDate, duration);
+        userManager.addDatesAndDuration(userId, startDate, endDate, duration);
     }
 
     public void loadTripDays() {
