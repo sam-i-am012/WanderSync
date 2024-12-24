@@ -63,8 +63,6 @@ public class FirestoreSingleton {
         return Objects.requireNonNull(auth.getCurrentUser()).getUid();
     }
 
-
-
     // synchronizes the associatedDestinations field (will be used at the login screen in case
     // destinations were manually removed from database)
     public void syncUserAssociatedDestinationsOnLogin(String userId,
@@ -87,12 +85,4 @@ public class FirestoreSingleton {
                             .addOnCompleteListener(onCompleteListener);
                 });
     }
-
-    // adds new travel log ID to the asssociatedDestinations array field for specific user
-    public void updateUserAssociatedDestinations(String userId, String travelLogId) {
-        firestore.collection("users").document(userId)
-                .update("associatedDestinations", FieldValue.arrayUnion(travelLogId));
-    }
-
-
 }

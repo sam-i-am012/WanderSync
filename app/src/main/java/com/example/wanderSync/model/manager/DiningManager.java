@@ -26,17 +26,7 @@ public class DiningManager {
 
     public void addDining(Dining dining, OnCompleteListener<DocumentReference> listener) {
         firestore.collection("dining")
-                .add(dining)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        String diningId = task.getResult().getId();
-
-                        firestoreSingleton.updateUserAssociatedDestinations(dining.getUserId(), diningId);
-                    }
-                    if (listener != null) {
-                        listener.onComplete(task);
-                    }
-                });
+                .add(dining);
     }
 
     public LiveData<List<Dining>> getDiningLogsByLocation(String locationId) {

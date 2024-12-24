@@ -83,7 +83,7 @@ public class TravelLogManager {
                         String travelLogId = task.getResult().getId();
 
                         // Update user's associatedDestinations
-                        firestoreSingleton.updateUserAssociatedDestinations(log.getUserId(), travelLogId);
+                        updateUserAssociatedDestinations(log.getUserId(), travelLogId);
 
                         // set documentId in the TravelLog object
                         String documentId = task.getResult().getId();
@@ -145,7 +145,7 @@ public class TravelLogManager {
                                     Log.d("Firestore", "User added to trip successfully!");
 
                                     // Update user's associatedDestinations array to include trip
-                                    firestoreSingleton.updateUserAssociatedDestinations(invitedUserId, tripId);
+                                    updateUserAssociatedDestinations(invitedUserId, tripId);
                                 })
                                 .addOnFailureListener(e -> Log.e("Firestore", "Error adding user to trip", e));
                     } else {
@@ -154,5 +154,11 @@ public class TravelLogManager {
                     }
                 })
                 .addOnFailureListener(e -> Log.e("Firestore", "Error finding travel log by location", e));
+    }
+
+    // adds new travel log ID to the asssociatedDestinations array field for specific user
+    private void updateUserAssociatedDestinations(String userId, String travelLogId) {
+        firestore.collection("users").document(userId)
+                .update("associatedDestinations", FieldValue.arrayUnion(travelLogId));
     }
 }
