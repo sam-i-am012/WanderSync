@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.wanderSync.model.manager.TravelCommunityManager;
 import com.example.wandersync.R;
 import com.example.wanderSync.model.FirestoreSingleton;
 import com.example.wanderSync.viewmodel.CommunityViewModel;
@@ -25,7 +26,8 @@ public class TravelCommunityActivity extends AppCompatActivity {
     private ImageButton destinationsButton;
     private ImageButton accommodationsButton;
     private ImageButton logisticsButton;
-    private final FirestoreSingleton firestore = FirestoreSingleton.getInstance();
+    private final FirestoreSingleton firestoreSingleton = FirestoreSingleton.getInstance();
+    private final TravelCommunityManager travelCommunityManager = new TravelCommunityManager();
 
 
     @Override
@@ -34,7 +36,7 @@ public class TravelCommunityActivity extends AppCompatActivity {
         setContentView(R.layout.activity_travel_community);
 
         // prepopulate database
-        firestore.populateCommunityDatabase();
+        travelCommunityManager.populateCommunityDatabase();
 
         initViews();
 

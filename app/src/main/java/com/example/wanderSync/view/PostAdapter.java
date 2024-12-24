@@ -12,14 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wandersync.R;
-import com.example.wanderSync.model.Post;
+import com.example.wanderSync.model.databaseModel.travelCommunity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private Context context;
-    private List<Post> posts;
+    private List<travelCommunity> posts;
 
     public PostAdapter(Context context) {
         this.context = context;
@@ -27,13 +27,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void addPost(Post post) {
+    public void addPost(travelCommunity post) {
         this.posts.add(0, post); // Add new post at the start
         notifyDataSetChanged(); // Notify the adapter that data has changed
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void updatePosts(List<Post> newPosts) {
+    public void updatePosts(List<travelCommunity> newPosts) {
         this.posts.clear();
         this.posts.addAll(newPosts);
         notifyDataSetChanged(); // Notify that data has been updated
@@ -49,7 +49,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Post post = posts.get(position);
+        travelCommunity post = posts.get(position);
         holder.tvUsername.setText(post.getPostUsername());
         holder.tvDestination.setText(post.getPostDestination());
         holder.tvDuration.setText(post.getPostStartDate() + " - " + post.getPostEndDate());
@@ -66,7 +66,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         return posts != null ? posts.size() : 0;
     }
 
-    public void setPosts(List<Post> posts) {
+    public void setPosts(List<travelCommunity> posts) {
         if (posts != null) {
             this.posts = posts;
         } else {

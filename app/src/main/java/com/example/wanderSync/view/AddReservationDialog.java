@@ -11,7 +11,7 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 
 import com.example.wandersync.R;
-import com.example.wanderSync.model.Dining;
+import com.example.wanderSync.model.databaseModel.Dining;
 import com.example.wanderSync.model.FirestoreSingleton;
 import com.example.wanderSync.viewmodel.DiningViewModel;
 

@@ -9,7 +9,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.wandersync.R;
-import com.example.wanderSync.model.Accommodation;
+import com.example.wanderSync.model.databaseModel.Accommodation;
 import com.example.wanderSync.model.FirestoreSingleton;
 import com.example.wanderSync.viewmodel.AccommodationViewModel;
 

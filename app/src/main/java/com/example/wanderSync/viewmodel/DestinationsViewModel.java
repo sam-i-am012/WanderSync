@@ -8,17 +8,21 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.wanderSync.model.FirestoreSingleton;
 import com.example.wanderSync.model.Result;
-import com.example.wanderSync.model.TravelLog;
+import com.example.wanderSync.model.manager.TravelLogManager;
+import com.example.wanderSync.model.databaseModel.TravelLog;
 import com.example.wanderSync.model.TravelLogValidator;
 import com.example.wanderSync.model.VacationTimeCalculator;
 import com.example.wanderSync.model.CalcVacationTimeValidator;
+import com.example.wanderSync.model.manager.UserManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
 public class DestinationsViewModel extends ViewModel {
-    private FirestoreSingleton repository;
+    private final FirestoreSingleton repository;
+    private final TravelLogManager travelLogManager = new TravelLogManager();
+    private  final UserManager userManager = new UserManager();
     private LiveData<List<TravelLog>> travelLogs;
     private LiveData<List<TravelLog>> lastFivetravelLogs;
     private VacationTimeCalculator vtCalculator = new VacationTimeCalculator();
@@ -35,7 +39,7 @@ public class DestinationsViewModel extends ViewModel {
             return;
         }
         String userId = user.getUid();
-        travelLogs = repository.getTravelLogsByUser(userId);
+        travelLogs = travelLogManager.getTravelLogsByUser(userId);
     }
 
     public LiveData<List<TravelLog>> getTravelLogs() {
@@ -50,7 +54,7 @@ public class DestinationsViewModel extends ViewModel {
         }
         String userId = user.getUid();
         Log.d("Firestore", "Fetching travel logs for user: " + userId);
-        lastFivetravelLogs = repository.getLastFiveTravelLogsByUser(userId);
+        lastFivetravelLogs = travelLogManager.getLastFiveTravelLogsByUser(userId);
     }
 
     public LiveData<List<TravelLog>> getLastFiveTravelLogs() {
@@ -58,7 +62,7 @@ public class DestinationsViewModel extends ViewModel {
     }
 
     public void addTravelLog(TravelLog log) {
-        repository.addTravelLog(log, null);
+        travelLogManager.addTravelLog(log, null);
     }
 
     public Result validateMissingEntry(String startDate, String endDate, String duration) {
@@ -75,13 +79,13 @@ public class DestinationsViewModel extends ViewModel {
 
     public void addDatesAndDuration(String userId, String startDate, String endDate,
                                     String duration) {
-        repository.addDatesAndDuration(userId, startDate, endDate, duration);
+        userManager.addDatesAndDuration(userId, startDate, endDate, duration);
     }
 
     public void loadTripDays() {
         String currentUserId = repository.getCurrentUserId();
         // Fetch trip data from Firestore and update LiveData accordingly
-        repository.getTravelLogsByUser(currentUserId).observeForever(logs -> {
+        travelLogManager.getTravelLogsByUser(currentUserId).observeForever(logs -> {
             int totalDays = 0;
             for (TravelLog log : logs) {
                 totalDays += TravelLogValidator.calculateDays(log.getStartDate(), log.getEndDate());

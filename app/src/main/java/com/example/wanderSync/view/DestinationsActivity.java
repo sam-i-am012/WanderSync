@@ -17,7 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wanderSync.model.FirestoreSingleton;
-import com.example.wanderSync.model.TravelLog;
+import com.example.wanderSync.model.manager.TravelLogManager;
+import com.example.wanderSync.model.databaseModel.TravelLog;
 import com.example.wanderSync.model.TravelLogValidator;
 import com.example.wanderSync.viewmodel.DestinationsViewModel;
 import com.example.wandersync.R;
@@ -58,12 +59,13 @@ public class DestinationsActivity extends AppCompatActivity {
     private TravelLogAdapter adapterAll;
     private DestinationsViewModel viewModel;
     private final FirestoreSingleton firestore = FirestoreSingleton.getInstance();
+    private final TravelLogManager travelLogManager = new TravelLogManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_destinations);
-        firestore.prepopulateDatabase();
+        travelLogManager.prepopulateDatabase();
 
         initViews();
         setupRecyclerView();

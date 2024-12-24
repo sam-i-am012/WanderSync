@@ -10,10 +10,12 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.wanderSync.model.Location;
 import com.example.wanderSync.model.ReservationValidator;
-import com.example.wanderSync.model.Dining;
+import com.example.wanderSync.model.manager.DiningManager;
+import com.example.wanderSync.model.manager.TravelLogManager;
+import com.example.wanderSync.model.databaseModel.Dining;
 import com.example.wanderSync.model.FirestoreSingleton;
 import com.example.wanderSync.model.Result;
-import com.example.wanderSync.model.TravelLog;
+import com.example.wanderSync.model.databaseModel.TravelLog;
 import com.example.wanderSync.view.DiningsAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,7 +27,9 @@ public class DiningViewModel extends AndroidViewModel {
     private DiningsAdapter diningAdapter = new DiningsAdapter();
 
     private MutableLiveData<List<Location>> userLocations = new MutableLiveData<>();
-    private FirestoreSingleton repository;
+    private FirestoreSingleton firestoreSingleton;
+    private final TravelLogManager travelLogManager = new TravelLogManager();
+    private final DiningManager diningManager = new DiningManager();
     private MutableLiveData<List<Dining>> diningLogs;
     private MutableLiveData<List<Dining>> diningLogsByLocation;
     private MutableLiveData<Result> resValidationResult = new MutableLiveData<>();
@@ -33,7 +37,7 @@ public class DiningViewModel extends AndroidViewModel {
 
     public DiningViewModel(@NonNull Application application) {
         super(application);
-        repository = FirestoreSingleton.getInstance();
+        firestoreSingleton = FirestoreSingleton.getInstance();
         diningLogs = new MutableLiveData<>();
         diningLogsByLocation = new MutableLiveData<>();
         loadUserLocations();
@@ -46,8 +50,8 @@ public class DiningViewModel extends AndroidViewModel {
     // load user's associated locations and update the LiveData
 
     private void loadUserLocations() {
-        String currentUserId = repository.getCurrentUserId();
-        repository.getTravelLogsByUser(currentUserId).observeForever(travelLogs -> {
+        String currentUserId = firestoreSingleton.getCurrentUserId();
+        travelLogManager.getTravelLogsByUser(currentUserId).observeForever(travelLogs -> {
             List<Location> locations = new ArrayList<>();
             for (TravelLog log : travelLogs) {
                 locations.add(new Location(log.getDocumentId(), log.getDestination()));
@@ -61,7 +65,7 @@ public class DiningViewModel extends AndroidViewModel {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             String userId = user.getUid();
-            repository.getDiningByUser(userId).observeForever(dinings ->
+            diningManager.getDiningByUser(userId).observeForever(dinings ->
                 // Update LiveData with fetched reservations
                 diningLogs.setValue(dinings));
         }
@@ -69,7 +73,7 @@ public class DiningViewModel extends AndroidViewModel {
 
     public void fetchDiningLogsForLocation(String locationId) {
         Log.d("Dining", "fetching dining logs for location: " + locationId);
-        repository.getDiningLogsByUserAndLocation(locationId).observeForever(dinings ->
+        diningManager.getDiningLogsByLocation(locationId).observeForever(dinings ->
             // update LiveData with fetched reservations
             diningLogsByLocation.setValue(dinings));
     }
@@ -84,7 +88,7 @@ public class DiningViewModel extends AndroidViewModel {
 
     public void addDining(Dining dining) {
         if (diningAdapter != null) {
-            repository.addDining(dining, null);
+            diningManager.addDining(dining, null);
             resValidationResult = new MutableLiveData<>();
 
             fetchDiningLogsForLocation(dining.getTravelDestination());

@@ -1,4 +1,4 @@
-package com.example.wanderSync.model;
+package com.example.wanderSync.model.databaseModel;
 
 public class Accommodation {
     private String hotel;

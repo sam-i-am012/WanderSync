@@ -4,19 +4,19 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.wanderSync.model.FirebaseAuthManager;
+import com.example.wanderSync.model.manager.AuthenticationManager;
 import com.example.wanderSync.model.InputValidator;
 import com.example.wanderSync.model.Result;
 import com.example.wanderSync.model.FirestoreSingleton;
 
 
 public class LoginViewModel extends ViewModel {
-    private FirebaseAuthManager firebaseAuthManager;
+    private AuthenticationManager authenticationManager;
     private MutableLiveData<Result> loginResult = new MutableLiveData<>();
     private FirestoreSingleton firestoreSingleton = FirestoreSingleton.getInstance();
 
     public LoginViewModel() {
-        firebaseAuthManager = new FirebaseAuthManager();
+        authenticationManager = new AuthenticationManager();
     }
 
     public LiveData<Result> getLoginResult() {
@@ -36,7 +36,7 @@ public class LoginViewModel extends ViewModel {
         }
 
         // continue with login
-        firebaseAuthManager.login(email, password).addOnCompleteListener(task -> {
+        authenticationManager.login(email, password).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 // sync associatedDestinations in case destinations were manually removed
                 // from database

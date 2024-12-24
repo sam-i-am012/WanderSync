@@ -7,9 +7,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.wanderSync.model.FirestoreSingleton;
-import com.example.wanderSync.model.Invitation;
-import com.example.wanderSync.model.TravelLog;
+import com.example.wanderSync.model.databaseModel.User;
+import com.example.wanderSync.model.manager.TravelLogManager;
+import com.example.wanderSync.model.databaseModel.Invitation;
+import com.example.wanderSync.model.databaseModel.TravelLog;
 import com.example.wanderSync.model.TripUtils;
+import com.example.wanderSync.model.manager.UserManager;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -17,7 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LogisticsViewModel extends ViewModel {
-    private FirestoreSingleton firestoreSingleton;
+    private final FirestoreSingleton firestore;
+    private final TravelLogManager travelLogManager = new TravelLogManager();
+    private final UserManager userManager = new UserManager();
     private MutableLiveData<List<String>> userLocations = new MutableLiveData<>();
     private MutableLiveData<String> toastMessage = new MutableLiveData<>();
     private MutableLiveData<Integer> plannedDaysLiveData = new MutableLiveData<>();
@@ -26,7 +31,7 @@ public class LogisticsViewModel extends ViewModel {
 
 
     public LogisticsViewModel() {
-        firestoreSingleton = FirestoreSingleton.getInstance();
+        firestore = FirestoreSingleton.getInstance();
         loadUserLocations();
         loadTripDays();
         loadDuration();
@@ -58,8 +63,8 @@ public class LogisticsViewModel extends ViewModel {
 
     // load user's associated locations and update the LiveData
     private void loadUserLocations() {
-        String currentUserId = firestoreSingleton.getCurrentUserId();
-        firestoreSingleton.getTravelLogsByUser(currentUserId).observeForever(travelLogs -> {
+        String currentUserId = firestore.getCurrentUserId();
+        travelLogManager.getTravelLogsByUser(currentUserId).observeForever(travelLogs -> {
             List<String> locations = new ArrayList<>();
             for (TravelLog log : travelLogs) {
                 locations.add(log.getDestination());
@@ -70,9 +75,9 @@ public class LogisticsViewModel extends ViewModel {
 
     // for planned days
     public void loadTripDays() {
-        String currentUserId = firestoreSingleton.getCurrentUserId();
+        String currentUserId = firestore.getCurrentUserId();
         // Fetch trip data from Firestore and update LiveData accordingly
-        firestoreSingleton.getTravelLogsByUser(currentUserId).observeForever(travelLogs -> {
+        travelLogManager.getTravelLogsByUser(currentUserId).observeForever(travelLogs -> {
             int totalDays = TripUtils.calculateTotalDays(travelLogs);  // use utility
             plannedDaysLiveData.setValue(totalDays);
         });
@@ -80,14 +85,13 @@ public class LogisticsViewModel extends ViewModel {
 
     // for allocated days
     public void loadDuration() {
-        String currentUserId = firestoreSingleton.getCurrentUserId();
-        allocatedLiveData = (MutableLiveData<Integer>) firestoreSingleton
-                .getDurationForUser(currentUserId);
+        String currentUserId = firestore.getCurrentUserId();
+        allocatedLiveData = (MutableLiveData<Integer>) userManager.getDurationForUser(currentUserId);
     }
 
     // to listen for invitations to accept / deny them
     private void listenForInvitations() {
-        String currentUserId = firestoreSingleton.getCurrentUserId();
+        String currentUserId = firestore.getCurrentUserId();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("invitations")
@@ -131,7 +135,7 @@ public class LogisticsViewModel extends ViewModel {
     // accept invitation
     public void acceptInvitation(Invitation invitation) {
         updateInvitationStatus(invitation.getInvitationId(), "accepted");
-        firestoreSingleton.addUserToTrip(invitation.getInvitingUserId(),
+        travelLogManager.addUserToTrip(invitation.getInvitingUserId(),
                 invitation.getInvitedUserId(), invitation.getTripLocation());
     }
 }

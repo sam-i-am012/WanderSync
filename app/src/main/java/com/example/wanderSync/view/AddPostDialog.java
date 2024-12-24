@@ -8,7 +8,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.wandersync.R;
-import com.example.wanderSync.model.Post;
+import com.example.wanderSync.model.databaseModel.travelCommunity;
 import com.example.wanderSync.viewmodel.CommunityViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -54,7 +54,7 @@ public class AddPostDialog extends Dialog {
             if (validateInputs(startDateET, endDateET, destinationET, accommodationsET, diningET,
                     notesET)) {
                 // Create a new post object
-                Post newPost = new Post(
+                travelCommunity newPost = new travelCommunity(
                         mAuth.getCurrentUser().getEmail(),
                         destination,
                         startDate,

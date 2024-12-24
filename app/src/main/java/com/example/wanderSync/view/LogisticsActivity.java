@@ -11,7 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.wandersync.R;
-import com.example.wanderSync.model.Invitation;
+import com.example.wanderSync.model.databaseModel.Invitation;
 import com.example.wanderSync.viewmodel.LogisticsViewModel;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;

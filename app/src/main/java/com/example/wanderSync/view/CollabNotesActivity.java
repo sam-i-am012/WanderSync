@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.wandersync.R;
 import com.example.wanderSync.model.Location;
-import com.example.wanderSync.model.User;
+import com.example.wanderSync.model.databaseModel.User;
 import com.example.wanderSync.viewmodel.CollabNotesViewModel;
 import java.util.ArrayList;
 import java.util.List;

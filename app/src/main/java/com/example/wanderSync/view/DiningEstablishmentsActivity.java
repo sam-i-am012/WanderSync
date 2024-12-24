@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.wandersync.R;
-import com.example.wanderSync.model.Dining;
+import com.example.wanderSync.model.databaseModel.Dining;
 import com.example.wanderSync.model.Location;
 import com.example.wanderSync.viewmodel.DiningViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
