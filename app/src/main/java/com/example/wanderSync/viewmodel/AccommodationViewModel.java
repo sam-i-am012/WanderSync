@@ -8,7 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.wanderSync.model.TravelLogManager;
+import com.example.wanderSync.model.manager.TravelLogManager;
 import com.example.wanderSync.model.databaseModel.Accommodation;
 import com.example.wanderSync.model.FirestoreSingleton;
 import com.example.wanderSync.model.Location;

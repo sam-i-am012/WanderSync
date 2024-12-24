@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.wanderSync.model.FirestoreSingleton;
-import com.example.wanderSync.model.TravelLogManager;
+import com.example.wanderSync.model.manager.TravelLogManager;
 import com.example.wanderSync.model.databaseModel.Invitation;
 import com.example.wanderSync.model.databaseModel.TravelLog;
 import com.example.wanderSync.model.TripUtils;
@@ -133,7 +133,7 @@ public class LogisticsViewModel extends ViewModel {
     // accept invitation
     public void acceptInvitation(Invitation invitation) {
         updateInvitationStatus(invitation.getInvitationId(), "accepted");
-        firestore.addUserToTrip(invitation.getInvitingUserId(),
+        travelLogManager.addUserToTrip(invitation.getInvitingUserId(),
                 invitation.getInvitedUserId(), invitation.getTripLocation());
     }
 }

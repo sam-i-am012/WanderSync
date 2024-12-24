@@ -1,5 +1,6 @@
-package com.example.wanderSync.model;
+package com.example.wanderSync.model.manager;
 
+import com.example.wanderSync.model.FirestoreSingleton;
 import com.example.wanderSync.model.databaseModel.User;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;

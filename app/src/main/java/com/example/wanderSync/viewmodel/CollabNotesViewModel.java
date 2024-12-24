@@ -7,7 +7,8 @@ import androidx.lifecycle.ViewModel;
 import com.example.wanderSync.model.FirestoreSingleton;
 import com.example.wanderSync.model.Location;
 import com.example.wanderSync.model.Note;
-import com.example.wanderSync.model.TravelLogManager;
+import com.example.wanderSync.model.manager.CollaboratorManager;
+import com.example.wanderSync.model.manager.TravelLogManager;
 import com.example.wanderSync.model.databaseModel.TravelLog;
 import com.example.wanderSync.model.databaseModel.User;
 import com.google.firebase.firestore.FieldValue;
@@ -18,16 +19,16 @@ import java.util.List;
 import java.util.Map;
 
 public class CollabNotesViewModel extends ViewModel {
-    private final FirestoreSingleton firestore;
-    private final TravelLogManager travelLogManager;
+    private final FirestoreSingleton firestoreSingleton;
+    private final TravelLogManager travelLogManager = new TravelLogManager();
+    private final CollaboratorManager collaboratorManager = new CollaboratorManager();
     private MutableLiveData<List<Location>> userLocations = new MutableLiveData<>();
     private MutableLiveData<String> toastMessage = new MutableLiveData<>();
     private MutableLiveData<List<Note>> notesLiveData = new MutableLiveData<>();  // display notes
 
 
     public CollabNotesViewModel() {
-        firestore = FirestoreSingleton.getInstance();
-        travelLogManager = new TravelLogManager();
+        firestoreSingleton = FirestoreSingleton.getInstance();
         loadUserLocations();
         notesLiveData = new MutableLiveData<>();
     }
@@ -43,8 +44,8 @@ public class CollabNotesViewModel extends ViewModel {
 
     // fetch notes for a specific location and current user
     public LiveData<List<Note>> getNotesForTravelLog(String location, String locationId) {
-        String currentUserId = firestore.getCurrentUserId();
-        firestore.getNotesForTravelLog(location, currentUserId,
+        String currentUserId = firestoreSingleton.getCurrentUserId();
+        firestoreSingleton.getNotesForTravelLog(location, currentUserId,
                 locationId).observeForever(notes ->
                     // update the live data
                     notesLiveData.setValue(notes));
@@ -53,7 +54,7 @@ public class CollabNotesViewModel extends ViewModel {
 
     // load user's associated locations and update the LiveData
     private void loadUserLocations() {
-        String currentUserId = firestore.getCurrentUserId();
+        String currentUserId = firestoreSingleton.getCurrentUserId();
         travelLogManager.getTravelLogsByUser(currentUserId).observeForever(travelLogs -> {
             List<Location> locations = new ArrayList<>();
             for (TravelLog log : travelLogs) {
@@ -72,7 +73,7 @@ public class CollabNotesViewModel extends ViewModel {
         }
 
         // check if user invited is already an existing user
-        firestore.checkEmailExists(email).addOnCompleteListener(task -> {
+        collaboratorManager.checkEmailExists(email).addOnCompleteListener(task -> {
             if (task.isSuccessful() && !task.getResult().isEmpty()) {
                 // uid of invited user
                 String invitedUser = task.getResult().getDocuments().get(0).getId();
@@ -80,7 +81,7 @@ public class CollabNotesViewModel extends ViewModel {
                 // data for Invitation class
                 Map<String, Object> invitationData = new HashMap<>();
                 // current user (inviter)
-                invitationData.put("invitingUserId", firestore.getCurrentUserId());
+                invitationData.put("invitingUserId", firestoreSingleton.getCurrentUserId());
                 invitationData.put("invitedUserId", invitedUser);  // user being invited
                 invitationData.put("invitingUserEmail", email);  // inviter's email
                 invitationData.put("tripLocation", location);  // location for the trip
@@ -104,16 +105,16 @@ public class CollabNotesViewModel extends ViewModel {
     }
 
     public LiveData<List<User>> getCollaboratorsForLocation(String location, String documentId) {
-        return firestore.getCollaboratorsForLocation(location,
-                firestore.getCurrentUserId(), documentId);
+        return collaboratorManager.getCollaboratorsForLocation(location,
+                firestoreSingleton.getCurrentUserId(), documentId);
     }
 
     public void addNoteToTravelLog(String location, String locationId, String noteContent) {
-        String userId = firestore.getCurrentUserId();
+        String userId = firestoreSingleton.getCurrentUserId();
 
         Note newNote = new Note(noteContent, userId);
 
-        firestore.addNoteToTravelLog(location, userId, locationId, newNote, task -> {
+        firestoreSingleton.addNoteToTravelLog(location, userId, locationId, newNote, task -> {
             if (task.isSuccessful()) {
                 toastMessage.setValue("Note added successfully!");
             } else {

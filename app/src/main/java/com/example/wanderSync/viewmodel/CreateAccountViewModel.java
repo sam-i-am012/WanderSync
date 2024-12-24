@@ -3,7 +3,7 @@ package com.example.wanderSync.viewmodel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import com.example.wanderSync.model.AuthenticationManager;
+import com.example.wanderSync.model.manager.AuthenticationManager;
 import com.example.wanderSync.model.Result;
 
 public class CreateAccountViewModel extends ViewModel {
