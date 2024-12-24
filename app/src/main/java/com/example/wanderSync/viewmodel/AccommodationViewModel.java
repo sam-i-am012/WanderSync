@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.wanderSync.model.manager.AccomodationsManager;
 import com.example.wanderSync.model.manager.TravelLogManager;
 import com.example.wanderSync.model.databaseModel.Accommodation;
 import com.example.wanderSync.model.FirestoreSingleton;
@@ -24,8 +25,9 @@ import java.util.List;
 public class AccommodationViewModel extends AndroidViewModel {
     
     private AccommodationsAdapter accommodationsAdapter = new AccommodationsAdapter();
-    private final FirestoreSingleton firestore;
-    private final TravelLogManager travelLogManager;
+    private final FirestoreSingleton firestoreSingleton;
+    private final TravelLogManager travelLogManager = new TravelLogManager();
+    private final AccomodationsManager accomodationsManager = new AccomodationsManager();
     private MutableLiveData<List<Accommodation>> accommodationLogs;
     private MutableLiveData<Result> resValidationResult = new MutableLiveData<>();
     private MutableLiveData<List<Location>> userLocations = new MutableLiveData<>();
@@ -33,8 +35,7 @@ public class AccommodationViewModel extends AndroidViewModel {
 
     public AccommodationViewModel(@NonNull Application application) {
         super(application);
-        firestore = FirestoreSingleton.getInstance();
-        travelLogManager = new TravelLogManager();
+        firestoreSingleton = FirestoreSingleton.getInstance();
         accommodationLogs = new MutableLiveData<>();
         loadUserLocations();
     }
@@ -43,7 +44,7 @@ public class AccommodationViewModel extends AndroidViewModel {
     public void fetchAccommodationLogsForDestination(String travelId) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            firestore.getAccommodationLogsByUser(travelId).observeForever(accommodations -> {
+            accomodationsManager.getAccommodationLogsByUser(travelId).observeForever(accommodations -> {
                 accommodationLogs.setValue(accommodations);
                 Log.d("Accommodation", "travel id: " + travelId);
             });
@@ -63,14 +64,14 @@ public class AccommodationViewModel extends AndroidViewModel {
     // Add an accommodation to the repository
     public void addAccommodation(Accommodation accommodation) {
         if (accommodationsAdapter != null) {
-            firestore.addAccommodation(accommodation, null);
+            accomodationsManager.addAccommodation(accommodation);
             resValidationResult = new MutableLiveData<>();
         }
     }
 
     // load user locations (used for spinner)
     private void loadUserLocations() {
-        String currentUserId = firestore.getCurrentUserId();
+        String currentUserId = firestoreSingleton.getCurrentUserId();
         travelLogManager.getTravelLogsByUser(currentUserId).observeForever(travelLogs -> {
             List<Location> locations = new ArrayList<>();
             for (TravelLog log : travelLogs) {

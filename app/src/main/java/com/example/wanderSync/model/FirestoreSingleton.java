@@ -141,58 +141,6 @@ public class FirestoreSingleton {
                     Log.w("Firestore", "Error updating document", e));
     }
 
-    public void addAccommodation(Accommodation accommodation,
-                                 OnCompleteListener<DocumentReference> listener) {
-        firestore.collection("accommodation")
-                .add(accommodation)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        String accommodationId = task.getResult().getId();
-
-                        updateUserAssociatedDestinations(accommodation.getUserId(),
-                                accommodationId);
-                    }
-                    if (listener != null) {
-                        listener.onComplete(task);
-                    }
-                });
-    }
-    public LiveData<List<Accommodation>> getAccommodationLogsByUser(String destinationId) {
-        MutableLiveData<List<Accommodation>> accommodationLiveData = new MutableLiveData<>();
-        FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
-
-        fireStore.collection("accommodation")
-                .whereEqualTo("travelDestination", destinationId) // query logs for this user
-                .addSnapshotListener((value, error) -> {
-                    if (error != null) {
-                        return; // to avoid null pointer
-                    }
-                    Log.d("Accomodatoin", "fetching accomodations for: " + destinationId);
-
-                    List<Accommodation> accommodationLogs = new ArrayList<>();
-                    for (QueryDocumentSnapshot document : value) {
-                        Accommodation log = document.toObject(Accommodation.class);
-                        accommodationLogs.add(log);
-                    }
-
-                    // Sort the logs by date (checkoutTime is in "yyyy-MM-dd" format)
-                    Collections.sort(accommodationLogs, new Comparator<Accommodation>() {
-                        @Override
-                        public int compare(Accommodation o1, Accommodation o2) {
-                            String date1 = o1.getCheckOutTime();
-                            String date2 = o2.getCheckOutTime();
-
-                            // Compare dates as strings (lexicographical order)
-                            return date2.compareTo(date1);
-                        }
-                    });
-
-                    accommodationLiveData.setValue(accommodationLogs);
-                });
-
-        return accommodationLiveData;
-    }
-
     public void addNoteToTravelLog(String location, String currentUserId, String documentId,
                                    Note note,
                                    OnCompleteListener<Void> listener) {
