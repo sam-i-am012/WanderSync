@@ -1,4 +1,4 @@
-package com.example.wanderSync.view;
+package com.example.wanderSync.view.accomodations;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,19 +13,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.wanderSync.view.DestinationsActivity;
+import com.example.wanderSync.view.dining.DiningEstablishmentsActivity;
+import com.example.wanderSync.view.LogisticsActivity;
+import com.example.wanderSync.view.travelCommunity.TravelCommunityActivity;
 import com.example.wandersync.R;
 import com.example.wanderSync.model.Location;
 import com.example.wanderSync.viewmodel.AccommodationViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class AccommodationsActivity extends AppCompatActivity {
-
     private AccommodationViewModel accommodationViewModel;
-    private ImageButton diningEstablishmentsButton;
-    private ImageButton destinationsButton;
-    private ImageButton logisticsButton;
-    private ImageButton travelCommunityButton;
-    private FloatingActionButton addAccommodationButton;
     private String selectedDestinationId = "";
 
     @Override
@@ -36,11 +35,10 @@ public class AccommodationsActivity extends AppCompatActivity {
         AccommodationsAdapter accommodationsAdapter;
         setContentView(R.layout.activity_accommodations); // The main layout
 
-        initViews();
-
         // ViewModel setup
         accommodationViewModel = new ViewModelProvider(this).get(AccommodationViewModel.class);
 
+        FloatingActionButton addAccommodationButton = findViewById(R.id.addAccommodationButton);
         addAccommodationButton.setOnClickListener(view -> {
             AddAccommodationsDialog addAccommodationsDialog = new AddAccommodationsDialog(
                     AccommodationsActivity.this, accommodationViewModel, selectedDestinationId);
@@ -67,15 +65,12 @@ public class AccommodationsActivity extends AppCompatActivity {
         navButtonsLogic();
     }
 
-    private void initViews() {
-        diningEstablishmentsButton = findViewById(R.id.diningEstablishmentsButton);
-        destinationsButton = findViewById(R.id.destinationsButton);
-        logisticsButton = findViewById(R.id.logisticsButton);
-        travelCommunityButton = findViewById(R.id.travelCommunityButton);
-        addAccommodationButton = findViewById(R.id.addAccommodationButton);
-    }
-
     private void navButtonsLogic() {
+        ImageButton diningEstablishmentsButton = findViewById(R.id.diningEstablishmentsButton);
+        ImageButton destinationsButton = findViewById(R.id.destinationsButton);
+        ImageButton logisticsButton = findViewById(R.id.logisticsButton);
+        ImageButton travelCommunityButton = findViewById(R.id.travelCommunityButton);
+
         // Handle navigation bar button presses
         diningEstablishmentsButton.setOnClickListener(view -> {
             Intent diningEstablishmentsIntent = new Intent(AccommodationsActivity.this,

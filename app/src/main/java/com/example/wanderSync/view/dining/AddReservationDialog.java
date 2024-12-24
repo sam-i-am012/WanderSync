@@ -1,4 +1,4 @@
-package com.example.wanderSync.view;
+package com.example.wanderSync.view.dining;
 
 import android.app.Dialog;
 import android.content.Context;

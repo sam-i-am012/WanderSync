@@ -1,4 +1,4 @@
-package com.example.wanderSync.view;
+package com.example.wanderSync.view.dining;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,11 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.wanderSync.view.DestinationsActivity;
+import com.example.wanderSync.view.LogisticsActivity;
+import com.example.wanderSync.view.travelCommunity.TravelCommunityActivity;
+import com.example.wanderSync.view.accomodations.AccommodationsActivity;
 import com.example.wandersync.R;
 import com.example.wanderSync.model.databaseModel.Dining;
 import com.example.wanderSync.model.Location;

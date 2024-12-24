@@ -1,4 +1,6 @@
-package com.example.wanderSync.model;
+package com.example.wanderSync.model.utils;
+
+import com.example.wanderSync.model.Result;
 
 import java.io.IOException;
 import java.net.URL;

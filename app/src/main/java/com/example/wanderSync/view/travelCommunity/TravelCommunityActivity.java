@@ -1,4 +1,4 @@
-package com.example.wanderSync.view;
+package com.example.wanderSync.view.travelCommunity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wanderSync.model.manager.TravelCommunityManager;
+import com.example.wanderSync.view.DestinationsActivity;
+import com.example.wanderSync.view.LogisticsActivity;
+import com.example.wanderSync.view.accomodations.AccommodationsActivity;
+import com.example.wanderSync.view.dining.DiningEstablishmentsActivity;
 import com.example.wandersync.R;
 import com.example.wanderSync.model.FirestoreSingleton;
 import com.example.wanderSync.viewmodel.CommunityViewModel;

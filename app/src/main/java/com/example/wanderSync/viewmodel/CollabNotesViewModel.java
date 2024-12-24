@@ -1,6 +1,6 @@
 package com.example.wanderSync.viewmodel;
 
-import static com.example.wanderSync.model.InputValidator.isValidEmail;
+import static com.example.wanderSync.model.utils.InputValidator.isValidEmail;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;

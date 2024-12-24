@@ -1,4 +1,4 @@
-package com.example.wanderSync.view;
+package com.example.wanderSync.view.collabNotes;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -16,6 +16,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.wanderSync.view.DestinationsActivity;
+import com.example.wanderSync.view.dining.DiningEstablishmentsActivity;
+import com.example.wanderSync.view.LogisticsActivity;
+import com.example.wanderSync.view.travelCommunity.TravelCommunityActivity;
+import com.example.wanderSync.view.accomodations.AccommodationsActivity;
 import com.example.wandersync.R;
 import com.example.wanderSync.model.Location;
 import com.example.wanderSync.model.databaseModel.User;
