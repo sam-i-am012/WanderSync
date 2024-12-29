@@ -59,14 +59,10 @@ public class CollabNotesActivity extends AppCompatActivity {
         notesAdapter = new NotesAdapter(new ArrayList<>());
         notesRecyclerView.setAdapter(notesAdapter);
 
-
-
-
         RecyclerView collaboratorsRecyclerView = findViewById(R.id.collaboratorsRecyclerView);
         collaboratorsAdapter = new CollaboratorsAdapter(new ArrayList<>());
         collaboratorsRecyclerView.setAdapter(collaboratorsAdapter);
         collaboratorsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
 
         ImageButton diningEstablishmentsButton = findViewById(R.id.diningEstablishmentsButton);
         ImageButton destinationsButton = findViewById(R.id.destinationsButton);

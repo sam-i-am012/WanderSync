@@ -34,11 +34,7 @@ public class DestinationsViewModel extends ViewModel {
 
 
     public void fetchTravelLogsForCurrentUser() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            return;
-        }
-        String userId = user.getUid();
+        String userId = FirestoreSingleton.getInstance().getCurrentUserId();
         travelLogs = travelLogManager.getTravelLogsByUser(userId);
     }
 
@@ -48,11 +44,7 @@ public class DestinationsViewModel extends ViewModel {
 
     // for only getting the last five entries
     public void fetchLastFiveTravelLogsForCurrentUser() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            return;
-        }
-        String userId = user.getUid();
+        String userId = FirestoreSingleton.getInstance().getCurrentUserId();
         Log.d("Firestore", "Fetching travel logs for user: " + userId);
         lastFivetravelLogs = travelLogManager.getLastFiveTravelLogsByUser(userId);
     }
