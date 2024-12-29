@@ -16,9 +16,9 @@ public class TravelLogValidator {
                 || TextUtils.isEmpty(endDate);
     }
 
-    // validate date format (YYYY-MM-DD)
+    // validate date format (MM-DD-YYYY)
     public static boolean isDateFormatInvalid(String date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
         sdf.setLenient(false);
         try {
             sdf.parse(date);
@@ -30,7 +30,7 @@ public class TravelLogValidator {
 
     // calc the num of days between start and end dates
     public static int calculateDays(String startDate, String endDate) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
         try {
             Date start = sdf.parse(startDate);
             Date end = sdf.parse(endDate);

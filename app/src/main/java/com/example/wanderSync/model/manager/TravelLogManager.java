@@ -106,11 +106,11 @@ public class TravelLogManager {
         travelLogsLiveData.observeForever(new Observer<List<TravelLog>>() {
             @Override
             public void onChanged(List<TravelLog> logs) {
-                TravelLog entry1 = new TravelLog(userId, "Paris", "2023-12-01",
-                        "2023-12-10", new ArrayList<>(Arrays.asList(userId)), new ArrayList<>());
+                TravelLog entry1 = new TravelLog(userId, "Paris", "12-01-2023",
+                        "12-10-2023", new ArrayList<>(Arrays.asList(userId)), new ArrayList<>());
 
-                TravelLog entry2 = new TravelLog(userId, "New York", "2023-11-15",
-                        "2023-11-20", new ArrayList<>(Arrays.asList(userId)), new ArrayList<>());
+                TravelLog entry2 = new TravelLog(userId, "New York", "11-15-2023",
+                        "11-20-2023", new ArrayList<>(Arrays.asList(userId)), new ArrayList<>());
 
                 if (logs.size() < 2) {
                     addTravelLog(entry1, null);

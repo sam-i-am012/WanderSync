@@ -151,7 +151,7 @@ public class DestinationsActivity extends AppCompatActivity {
             } else if (TravelLogValidator.isDateFormatInvalid(startDate)
                     || TravelLogValidator.isDateFormatInvalid(endDate)
                     || TravelLogValidator.calculateDays(startDate, endDate) < 0) {
-                Toast.makeText(getApplicationContext(), "Please enter valid dates (YYYY-MM-DD)",
+                Toast.makeText(getApplicationContext(), "Please enter valid dates (MM-DD-YYYY)",
                         Toast.LENGTH_SHORT).show();
                 return;
             }

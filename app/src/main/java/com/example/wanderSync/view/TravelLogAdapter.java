@@ -27,7 +27,7 @@ public class TravelLogAdapter extends RecyclerView.Adapter<TravelLogAdapter.View
     }
 
     private int calculateDays(String startDate, String endDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
         LocalDate start = LocalDate.parse(startDate, formatter);
         LocalDate end = LocalDate.parse(endDate, formatter);
 
