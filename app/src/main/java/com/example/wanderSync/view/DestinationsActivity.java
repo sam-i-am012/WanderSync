@@ -49,7 +49,6 @@ public class DestinationsActivity extends AppCompatActivity {
     private Button calculateButton;
     private Button logTravelButton;
     private View resultLayout;
-
     private RecyclerView recyclerView;
     private TravelLogAdapter adapter;
     private TravelLogAdapter adapterAll;
@@ -297,12 +296,9 @@ public class DestinationsActivity extends AppCompatActivity {
         });
 
         // observe getPlannedDaysLiveData
-        viewModel.getPlannedDaysLiveData().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer totalDays) {
-                // Update the total days text
-                updateTotalDaysText(totalDays);
-            }
+        viewModel.getPlannedDaysLiveData().observe(this, totalDays -> {
+            // Update the total days text
+            updateTotalDaysText(totalDays);
         });
 
         // observe getLastFiveTravelLogs which will only show the last five entries
@@ -321,12 +317,4 @@ public class DestinationsActivity extends AppCompatActivity {
         resultText.setText(totalDays + "\n" + "days");
     }
 
-    @SuppressLint("NewApi")
-    private int calculateDays(String startDate, String endDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate start = LocalDate.parse(startDate, formatter);
-        LocalDate end = LocalDate.parse(endDate, formatter);
-
-        return (int) ChronoUnit.DAYS.between(start, end);
-    }
 }

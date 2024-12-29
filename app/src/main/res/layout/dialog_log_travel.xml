@@ -5,6 +5,7 @@
     android:orientation="vertical"
     android:padding="20dp">
 
+    <!-- title -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,28 +15,62 @@
         android:gravity="center"
         android:layout_marginBottom="16dp" />
 
+    <!-- travel location -->
+    <TextView
+        android:id="@+id/travelLocationsTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/coolvetica"
+        android:gravity="start"
+        android:text="Travel Location:"
+        android:textSize="20sp" />
+
     <EditText
         android:id="@+id/dialog_travelLocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter Travel Location"
-        android:padding="10dp" />
+        android:padding="10dp"
+        android:textSize="16sp" />
+
+    <!-- estimated start date -->
+    <TextView
+        android:id="@+id/estimatedStartTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/coolvetica"
+        android:gravity="start"
+        android:text="Estimated Start:"
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/dialog_startDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Estimated Start Date (YYYY-MM-DD)"
+        android:hint="YYYY-MM-DD"
         android:padding="10dp"
-        android:layout_marginTop="10dp" />
+        android:textSize="16sp" />
+
+    <!-- estimated end date -->
+    <TextView
+        android:id="@+id/estimatedEndTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/coolvetica"
+        android:gravity="start"
+        android:text="Estimated End:"
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/dialog_endDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Estimated End Date (YYYY-MM-DD)"
+        android:hint="YYYY-MM-DD"
         android:padding="10dp"
-        android:layout_marginTop="10dp" />
+        android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
